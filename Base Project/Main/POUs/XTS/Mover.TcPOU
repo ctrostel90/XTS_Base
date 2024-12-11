@@ -1296,7 +1296,7 @@ FOR i := 1 TO GVL.NUM_MOVERS DO
 						
 		// remain within the same lap
 		IF currentDifference < 0 THEN
-			currentDifference 		:= currentDifference + GVL.TRACK_LENGTH;
+			currentDifference 		:= currentDifference + internalTrack^.Length;
 		END_IF
 	
 		IF currentDifference < minimumDifference THEN
@@ -1352,7 +1352,7 @@ FOR i := 1 TO GVL.NUM_MOVERS DO
 		
 		// remain within the same lap
 		IF currentDifference < 0 THEN
-			currentDifference		:= currentDifference + GVL.TRACK_LENGTH;
+			currentDifference		:= currentDifference + internalTrack^.Length;
 		END_IF
 		
 		IF currentDifference < minimumDifference THEN
@@ -1774,8 +1774,8 @@ ELSE	// let 'er rip
 	
 	
 	syncPos			:= internalMasterMover.AxisReference.NcToPlc.ActPos - internalGap;
-	CWDistToSync	:= MODABS( syncPos - THIS^.AxisReference.NcToPlc.ActPos, GVL.TRACK_LENGTH );
-	CWDistToMaster	:= MODABS( internalMasterMover.AxisReference.NcToPlc.ActPos - THIS^.AxisReference.NcToPlc.ActPos, GVL.TRACK_LENGTH );
+	CWDistToSync	:= MODABS( syncPos - THIS^.AxisReference.NcToPlc.ActPos, internalTrack^.Length );
+	CWDistToMaster	:= MODABS( internalMasterMover.AxisReference.NcToPlc.ActPos - THIS^.AxisReference.NcToPlc.ActPos, internalTrack^.Length );
 		
 	IF fbGearInPosMoverCA[0].Busy = FALSE THEN
 		
@@ -1785,7 +1785,7 @@ ELSE	// let 'er rip
 		fbGearInPosMoverCA[0].RatioDenumerator		:= 1;
 		
 		fbGearInPosMoverCA[0].MasterSyncPosition		:= internalMasterMover.AxisReference.NcToPlc.ActPos;
-		fbGearInPosMoverCA[0].SlaveSyncPosition		:= MODABS( internalMasterMover.AxisReference.NcToPlc.ActPos - internalGap, GVL.TRACK_LENGTH);
+		fbGearInPosMoverCA[0].SlaveSyncPosition		:= MODABS( internalMasterMover.AxisReference.NcToPlc.ActPos - internalGap, internalTrack^.Length);
 		
 		fbGearInPosMoverCA[0].SyncStrategy			:= mcSyncStrategyEarly;		
 		fbGearInPosMoverCA[0].SyncMode				:= SEL( CWDistToSync < CWDistToMaster, mcSyncModeNegative, mcSyncModePositive );
@@ -1814,7 +1814,7 @@ ELSE	// let 'er rip
 		fbGearInPosMoverCA[1].RatioDenumerator		:= 1;
 		
 		fbGearInPosMoverCA[1].MasterSyncPosition		:= internalMasterMover.AxisReference.NcToPlc.ActPos;
-		fbGearInPosMoverCA[1].SlaveSyncPosition		:= MODABS( internalMasterMover.AxisReference.NcToPlc.ActPos - internalGap, GVL.TRACK_LENGTH);
+		fbGearInPosMoverCA[1].SlaveSyncPosition		:= MODABS( internalMasterMover.AxisReference.NcToPlc.ActPos - internalGap, internalTrack^.Length);
 		
 		fbGearInPosMoverCA[1].SyncStrategy			:= mcSyncStrategyEarly;
 		fbGearInPosMoverCA[1].SyncMode				:= SEL( CWDistToSync < CWDistToMaster, mcSyncModeNegative, mcSyncModePositive );

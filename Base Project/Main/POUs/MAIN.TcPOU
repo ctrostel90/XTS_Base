@@ -247,11 +247,13 @@ nextStation := 4;]]></ST>
 		// Add all PositionTriggers to the Mediator
 		FOR i := 0 TO GVL.NUM_POSITIONTRIGGERS - 1 DO
 			System.AddPositionTrigger( PositionTrigger[i] );
+			PositionTrigger[i].SetTrack(Track[1]);
 		END_FOR
 		
 		// Add all Stations to the Mediator
 		FOR i := 0 TO GVL.NUM_STATIONS - 1 DO
 			System.AddStation( Station[i] );
+			Station[i].SetTrack(Track[1]);
 		END_FOR
 		
 		// Add all Tracks to the Mediator
@@ -264,6 +266,7 @@ nextStation := 4;]]></ST>
 		// Add all Zones to the Mediator
 		FOR i := 0 TO GVL.NUM_ZONES - 1 DO
 			System.AddZone( Zone[i] );
+			Zone[i].SetTrack(Track[1]);
 		END_FOR]]></ST>
       </Implementation>
     </Action>

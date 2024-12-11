@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
   <POU Name="Station" Id="{92e40052-9fe7-43db-83b2-957f02760d97}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK Station EXTENDS Objective
 VAR
 
     {attribute 'hide'}
     internalPosition 				: LREAL;
-	internalTrackId 				: DINT := 1; 
+	internalTrack 					: REFERENCE TO Track; 
 	internalGroupSize				: DINT := 1;	// used for calculating blocked statistics for multi-up stations
 	
 	internalStationOccupiedTimer	: TON;
@@ -62,11 +62,11 @@ FOR i := 1 TO SIZEOF(internalTrackedMovers) / SIZEOF(internalTrackedMovers[1]) D
 
     IF internalTrackedMovers[i] <> 0 THEN
 		moverTrackId := internalTrackedMovers[i]^.CurrentTrack^.Id;
-		IF (moverTrackId = internalTrackId) THEN
+		IF (moverTrackId = internalTrack.Id) THEN
 
 			difference := ABS(internalTrackedMovers[i]^.TrackInfo.TrackPosition - Position);
 
-			IF MIN(difference, GVL.TRACK_LENGTH - difference) < 1.0 AND NOT internalTrackedMovers[i]^.Busy THEN
+			IF MIN(difference, internalTrackedMovers[i]^.CurrentTrack^.Length - difference) < 1.0 AND NOT internalTrackedMovers[i]^.Busy THEN
 				CurrentMover                    REF= internalTrackedMovers[i]^;
 				CurrentMover.SourceInstancePath := THIS^.InstancePath;
 			END_IF
@@ -163,7 +163,7 @@ IF internalBlocked THEN
 	internalStationBlockedTimer(IN := internalBlocked, PT := T#40D, ET => Statistics.TimeBlocked);
 	// calculate the previous mover's distance traveled and compare to gap*station group (minimum distance required to receive next mover)
 	lastMoverDist :=  ABS(Position - internalLastMover.TrackInfo.TrackPosition);
-	IF MIN(lastMoverDist, GVL.TRACK_LENGTH - lastMoverDist) >= internalLastMover.MotionParameters.Gap * GroupSize THEN
+	IF MIN(lastMoverDist, internalLastMover.CurrentTrack^.Length - lastMoverDist) >= internalLastMover.MotionParameters.Gap * GroupSize THEN
 		// use 1.0 as alphaema on reset
 		IF (internalStationBlockedReset) THEN
 			alphaEMABlocked := 1.0;
@@ -248,10 +248,10 @@ FOR i := 1 TO SIZEOF(internalTrackedMovers) / SIZEOF(internalTrackedMovers[1]) D
     // todo: make in-position tolerance adjustable. add condition that mover is stopped?
     IF internalTrackedMovers[i] <> 0  AND_THEN internalTrackedMovers[i]^.CurrentTrack <> 0 THEN
 		moverTrackId := internalTrackedMovers[i]^.CurrentTrack^.Id;
-		IF (moverTrackId = internalTrackId) THEN
+		IF (moverTrackId = internalTrack.Id) THEN
 			difference := ABS(Position - internalTrackedMovers[i]^.TrackInfo.TrackPosition);
 
-			IF MIN(difference, GVL.TRACK_LENGTH - difference) < 1.0 AND NOT internalTrackedMovers[i]^.Busy THEN
+			IF MIN(difference, internalTrackedMovers[i]^.CurrentTrack^.Length - difference) < 1.0 AND NOT internalTrackedMovers[i]^.Busy THEN
 				MoverInPosition := TRUE;
 			END_IF
 		END_IF;
@@ -309,24 +309,26 @@ internalStationEmptyReset			:= TRUE;
 internalStationBlockedReset			:= TRUE;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="TrackId" Id="{dd27eb4c-c068-0d87-1f18-811d55fc3099}" FolderPath="Properties\">
+    <Method Name="SetTrack" Id="{9d13051a-e537-0d9f-2569-0461e2d6bace}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD SetTrack : BOOL
+VAR_INPUT
+	Track : REFERENCE TO TRACK;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[internalTrack REF= Track;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="TrackId" Id="{6d6a249d-c25d-0237-3e17-aa83e05fd3b7}" FolderPath="Properties\">
       <Declaration><![CDATA[PROPERTY TrackId : DINT]]></Declaration>
-      <Get Name="Get" Id="{be7a013c-37ba-0a27-340c-88598ee84d38}">
+      <Get Name="Get" Id="{3256d11c-1e3a-0a30-3003-d3771b18061e}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[TrackId := internalTrackId;]]></ST>
+          <ST><![CDATA[TrackId := internalTrack.Id;]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{bd28dde0-1e47-0849-0f5f-d2aee5da86fa}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[internalTrackId := TrackId;]]></ST>
-        </Implementation>
-      </Set>
     </Property>
   </POU>
 </TcPlcObject>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
   <Itf Name="iTrack" Id="{41e6f11d-1951-01da-13f4-8ac69ce6b873}">
     <Declaration><![CDATA[INTERFACE iTrack
 ]]></Declaration>
@@ -35,6 +35,12 @@ END_VAR
     <Property Name="isInitialized" Id="{b0b7211b-de4e-0de3-060d-549dd1bdb96f}" FolderPath="Properties\">
       <Declaration><![CDATA[PROPERTY isInitialized : bool]]></Declaration>
       <Get Name="Get" Id="{6fdcd363-dd42-01b0-0a9a-0f3d6c5fd19a}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Length" Id="{b9318c9f-bf2d-07e7-2a22-8d470bdb0399}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY Length : LREAL]]></Declaration>
+      <Get Name="Get" Id="{e0e836e5-de2f-00fe-0771-f9b8048f52bc}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>

@@ -1,11 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
   <GVL Name="GVL" Id="{73e6a867-4426-4dae-a583-2a717b275c1c}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
 
-	TRACK_LENGTH 			: LREAL := 4000; // This should be set to the exact length [mm] of the track system
-		
 	NUM_MOVERS   			: USINT := 6;   // This should be set to the exact number of movers on the system
 	
 	// The following should be set to a value **equal to or greater than** the number of objectives needed
@@ -25,6 +23,7 @@ VAR_GLOBAL CONSTANT
 END_VAR
 VAR_GLOBAL
 	newCallTime: LREAL;
+	SET_INITIALIZED: INT;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

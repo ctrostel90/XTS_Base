@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.8">
   <POU Name="Track" Id="{1d568bee-17b0-45d9-8c81-c6842c2a11d5}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK Track EXTENDS Objective IMPLEMENTS iTrack
 VAR_INPUT
@@ -13,6 +13,7 @@ VAR
 	internalMoverList : MoverList;	// working list of movers on this track
 	internalIdIsSet			: BOOL; // track ID has been set, it is now ok to find the track OTCID
 	internalOTCIDIsSet		: BOOL;	// track OTCID has been set, track commands can now be run
+	internalLength			: LREAL; // length of track
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
@@ -76,6 +77,10 @@ END_VAR]]></Declaration>
 				
 		TrackCyclicState.GET_OTCID: // get otcid
 			internalOTCID := Mediator.XPU.P_TrackOids[internalId];
+			nState :=TrackCyclicState.GET_LENGTH;
+			
+		TrackCyclicState.GET_LENGTH: // get length of track
+			internalLength := Mediator.XPU.TrackTcIo(INT_TO_UINT(internalId)).GetLength();
 			nState :=TrackCyclicState.SET_INITIALIZED;
 			
 		TrackCyclicState.SET_INITIALIZED: // set intitialized and rewind
@@ -116,6 +121,17 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[isInitialized := internalIdIsSet and internalOTCIDIsSet;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Length" Id="{731ee340-56f2-0420-0c68-da0e76182eac}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY Length : LREAL]]></Declaration>
+      <Get Name="Get" Id="{a6bda8dc-bbad-0147-3a11-89fe51919dea}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Length := internalLength;]]></ST>
         </Implementation>
       </Get>
     </Property>

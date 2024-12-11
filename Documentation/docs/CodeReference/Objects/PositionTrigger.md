@@ -78,6 +78,16 @@ This method will produce a [Log Event](../Diagnostics/EventLogger.md) to aid in 
 
 > Resets the Statistics for this station. See the [Statistics](#statistics) property.
 
+### Set track
+
+*SetTrack(<Track>)*
+
+
+```javascript
+PositionTrigger[1].Position := 1000.0;
+PositionTrigger[1].SetTrack(Track[2]);
+```
+
 
 ## Properties
 
@@ -106,7 +116,7 @@ Position Triggers are unique in that the Current Mover output *latches* even tho
 > Current placement of the Position Trigger threshold along the track
 
 
-### .TrackId
+### .Track
 > Track that the station is assigned to when using track management. See the [Track](Track.md) object.
 
 

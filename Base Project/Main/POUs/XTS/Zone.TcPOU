@@ -6,7 +6,7 @@ VAR
 
     internalStartPosition : LREAL;
     internalEndPosition   : LREAL;
-	internalTrackId : DINT := 1; 
+	internalTrack : REFERENCE TO Track; 
 
     internalMoverList : MoverList;
 
@@ -41,7 +41,7 @@ END_VAR]]></Declaration>
 FOR i := 1 TO SIZEOF(TrackedMovers) / SIZEOF(internalTrackedMovers[1]) DO
     IF internalTrackedMovers[i] <> 0 AND_THEN internalTrackedMovers[i]^.IsTrackReady AND internalTrackedMovers[i]^.CurrentTrack <> 0 THEN
 		moverTrackId := internalTrackedMovers[i]^.CurrentTrack^.Id;
-		IF (moverTrackId = internalTrackId) THEN
+		IF (moverTrackId = internalTrack.Id) THEN
 			IF internalStartPosition < internalEndPosition
 				   AND internalTrackedMovers[i]^.TrackInfo.TrackPosition > internalStartPosition
 				   AND internalTrackedMovers[i]^.TrackInfo.TrackPosition < internalEndPosition THEN
@@ -114,6 +114,16 @@ IF __ISVALIDREF(GetMover) = FALSE THEN
 END_IF]]></ST>
       </Implementation>
     </Method>
+    <Method Name="SetTrack" Id="{7cc8b098-587a-05e2-14ee-fd833da9898e}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD SetTrack : BOOL
+VAR_INPUT
+	Track : REFERENCE TO TRACK;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[internalTrack REF= Track;]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="StartPosition" Id="{aacc7e02-3b0c-44c1-b85c-a6193164623c}" FolderPath="Properties\">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY StartPosition : LREAL]]></Declaration>
@@ -133,25 +143,16 @@ internalStartPosition := StartPosition;]]></ST>
         </Implementation>
       </Set>
     </Property>
-    <Property Name="TrackId" Id="{34504a8f-493b-0e04-3cea-a6a6de9a5490}" FolderPath="Properties\">
-      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
-PROPERTY TrackId : DINT]]></Declaration>
-      <Get Name="Get" Id="{22604838-72af-02be-393b-0a8dbf53fe15}">
+    <Property Name="TrackId" Id="{fa238337-4029-0a7e-0a02-4f8a1ea15d7d}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY TrackId : DINT]]></Declaration>
+      <Get Name="Get" Id="{2dbe3079-85d1-0042-009b-dd035bd899ff}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[TrackId := internalTrackId;]]></ST>
+          <ST><![CDATA[TrackId := internalTrack.Id;]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{40694441-9ba3-007e-1cfc-587dcbdae0b4}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[internalTrackId := TrackId;]]></ST>
-        </Implementation>
-      </Set>
     </Property>
     <Property Name="ZoneLength" Id="{cc1fdc68-29d3-4f91-948b-3fe78f7d05d8}" FolderPath="Properties\">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
@@ -164,7 +165,7 @@ PROPERTY ZoneLength : LREAL]]></Declaration>
     ZoneLength := internalEndPosition - internalStartPosition;
 ELSIF internalStartPosition > internalEndPosition THEN
     // Zone DOES include the rollover point
-    ZoneLength := internalEndPosition + (internalEndPosition + GVL.TRACK_LENGTH - internalStartPosition);
+    ZoneLength := internalEndPosition + (internalEndPosition + internalTrack.Length - internalStartPosition);
 ELSE
     // Start and end position are coincident, ZL is 0
     ZoneLength := 0;

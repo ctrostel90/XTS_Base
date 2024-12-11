@@ -194,6 +194,8 @@ VAR
 	
 	cycles				: UDINT;
 	
+	trackLength			: LREAL;
+	
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -258,26 +260,26 @@ WHILE allsorted = FALSE DO
 				IF SortedBuffer[i] <> 0 AND_THEN SortedBuffer[i]^.TrackInfo.TrackPosition <= Position THEN
 					directionalDistance_i		:= Position - SortedBuffer[i]^.TrackInfo.TrackPosition;
 				ELSIF SortedBuffer[i] <> 0 AND_THEN SortedBuffer[i]^.TrackInfo.TrackPosition > Position THEN
-					directionalDistance_i		:= Position + ( GVL.TRACK_LENGTH - SortedBuffer[i]^.TrackInfo.TrackPosition );
+					directionalDistance_i		:= Position + ( SortedBuffer[i]^.CurrentTrack^.Length - SortedBuffer[i]^.TrackInfo.TrackPosition );
 				END_IF;	
 				// Calculate for j
 				IF SortedBuffer[j] <> 0 AND_THEN SortedBuffer[j]^.TrackInfo.TrackPosition <= Position THEN
 					directionalDistance_j		:= Position - SortedBuffer[j]^.TrackInfo.TrackPosition;
 				ELSIF SortedBuffer[j] <> 0 AND_THEN SortedBuffer[j]^.TrackInfo.TrackPosition > Position THEN
-					directionalDistance_j		:= Position + ( GVL.TRACK_LENGTH - SortedBuffer[j]^.TrackInfo.TrackPosition );					 
+					directionalDistance_j		:= Position + ( SortedBuffer[i]^.CurrentTrack^.Length - SortedBuffer[j]^.TrackInfo.TrackPosition );					 
 				END_IF
 				
 			ELSIF Direction = MC_Negative_Direction THEN
 				
 				// Calculate for i
 				IF SortedBuffer[i] <> 0 AND_THEN SortedBuffer[i]^.TrackInfo.TrackPosition <= Position THEN
-					directionalDistance_i		:= SortedBuffer[i]^.TrackInfo.TrackPosition + ( GVL.TRACK_LENGTH - Position );
+					directionalDistance_i		:= SortedBuffer[i]^.TrackInfo.TrackPosition + ( SortedBuffer[i]^.CurrentTrack^.Length - Position );
 				ELSIF SortedBuffer[i] <> 0 AND_THEN SortedBuffer[i]^.TrackInfo.TrackPosition > Position THEN
 					directionalDistance_i		:= SortedBuffer[i]^.TrackInfo.TrackPosition - Position;
 				END_IF
 				// Calculate for j
 				IF SortedBuffer[j] <> 0 AND_THEN SortedBuffer[j]^.TrackInfo.TrackPosition <= Position THEN
-					directionalDistance_j		:= SortedBuffer[j]^.TrackInfo.TrackPosition + ( GVL.TRACK_LENGTH - Position );
+					directionalDistance_j		:= SortedBuffer[j]^.TrackInfo.TrackPosition + ( SortedBuffer[i]^.CurrentTrack^.Length - Position );
 				ELSIF SortedBuffer[j] <> 0 AND_THEN SortedBuffer[j]^.TrackInfo.TrackPosition > Position THEN
 					directionalDistance_j		:= SortedBuffer[j]^.TrackInfo.TrackPosition - Position;
 				END_IF

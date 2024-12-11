@@ -89,10 +89,6 @@ Inside *MOTION > Objects > Collision Avoidance (CA Group)*, set the **Rail Lengt
 
 ![CollisionAvoidanceLength](../Images/CALength.png)
 
-Next, open the GVL file within PLC and modify these constants to match your system.
-
-![GlobalVariables](../Images/GlobalVars.png)
-
 Next, check that each of your Axis objects are properly linked to a corresponding Mover object.
 
 !!! Note The project contains *ErrorMover* objects which also appear as options when linking axes. **Do not link axes to these variables.**

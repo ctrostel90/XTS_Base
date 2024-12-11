@@ -60,6 +60,15 @@ The call to Cyclic() is handled automatically after the station has been registe
 
 > Resets the Statistics for this station. See the [Statistics](#statistics) property.
 
+### Set track
+
+*SetTrack(<Track>)*
+
+```javascript
+Station[1].Position := 1000.0;
+Station[1].SetTrack(Track[2]);
+```
+
 ## Properties
 
 ### .Blocked

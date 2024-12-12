@@ -72,8 +72,8 @@ END_VAR]]></Declaration>
         <ST><![CDATA[currentIsRegistered		:= FALSE;
 
 FOR i := 1 TO Param.NUM_MOVERS DO
-    IF internalTrackedMovers[i] <> 0 AND_THEN internalTrackedMovers[i]^.IsTrackReady AND internalTrackedMovers[i]^.CurrentTrack <> 0 THEN
-		moverTrackId := internalTrackedMovers[i]^.CurrentTrack^.Id;
+    IF internalRegisteredMovers[i] <> 0 AND_THEN internalRegisteredMovers[i]^.IsTrackReady AND internalRegisteredMovers[i]^.CurrentTrack <> 0 THEN
+		moverTrackId := internalRegisteredMovers[i]^.CurrentTrack^.Id;
 		IF (moverTrackId = internalTrackId) THEN
 			
 			// last position is invalid on first scan, set it to the current position to avoid a false trigger on the first scan
@@ -83,7 +83,7 @@ FOR i := 1 TO Param.NUM_MOVERS DO
 			END_IF
 		
 			// Determine if a position rollover occured in the last cycle
-			modTrackPosition := MODABS( internalTrackedMovers[i]^.TrackInfo.TrackPosition, Param.TRACK_LENGTH);
+			modTrackPosition := MODABS( internalRegisteredMovers[i]^.TrackInfo.TrackPosition, Param.TRACK_LENGTH);
 			positionDifference := moverLastPos[i] - modTrackPosition;			
 			rolloverOccured := ABS( positionDifference ) > ( Param.TRACK_LENGTH / 2 );
 			
@@ -101,21 +101,21 @@ FOR i := 1 TO Param.NUM_MOVERS DO
 				
 				// Position trigger event detected in the positive direction
 				internalMoverPassedPosition		:= TRUE;
-				internalCurrentMover			:= internalTrackedMovers[i];
+				internalCurrentMover			:= internalRegisteredMovers[i];
 				
 			ELSIF TriggerDirection = MC_Negative_Direction AND moverLastPos[i] > internalPosition AND
 				modTrackPosition <= internalPosition THEN
 				
 				// Position trigger event detecte in the negative direction
 				internalMoverPassedPosition		:= TRUE;
-				internalCurrentMover			:= internalTrackedMovers[i];
+				internalCurrentMover			:= internalRegisteredMovers[i];
 				
 			END_IF
 			
 			
 			
 			// Ensure that the CurrentMover is still registered with the PositionTrigger
-			IF internalCurrentMover <> 0 AND internalTrackedMovers[i] = internalCurrentMover THEN
+			IF internalCurrentMover <> 0 AND internalRegisteredMovers[i] = internalCurrentMover THEN
 				currentIsRegistered		:= TRUE;
 			END_IF
 	
@@ -301,5 +301,46 @@ END_VAR]]></Declaration>
         </Implementation>
       </Set>
     </Property>
+    <LineIds Name="PositionTrigger">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PositionTrigger.CurrentMover.Get">
+      <LineId Id="3" Count="9" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PositionTrigger.Cyclic">
+      <LineId Id="3" Count="116" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PositionTrigger.MoverPassedPosition.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PositionTrigger.MuteCurrent">
+      <LineId Id="3" Count="9" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PositionTrigger.Position.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PositionTrigger.Position.Set">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PositionTrigger.ResetStatistics">
+      <LineId Id="3" Count="12" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PositionTrigger.TrackId.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PositionTrigger.TrackId.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PositionTrigger.TriggerDirection.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="PositionTrigger.TriggerDirection.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

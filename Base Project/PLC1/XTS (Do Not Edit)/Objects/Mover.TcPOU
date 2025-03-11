@@ -922,6 +922,26 @@ END_IF]]></ST>
         </Implementation>
       </Get>
     </Property>
+    <Method Name="MoveRelative" Id="{07bd2f2e-b3fd-4b00-8685-88ed8a652324}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD MoveRelative : iMover
+VAR_INPUT
+	Distance : LREAL;		//The Relative Distance to move
+END_VAR
+VAR
+	negativeCommand	: BOOL;
+	newCallTime		: LREAL;
+END_VAR
+VAR_INST
+	MsgCreate		: FB_TcMessage;	
+END_VAR
+VAR CONSTANT
+	RelDistance: LREAL := 1e10;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[MoveToPosition(AxisReference.NcToPlc.SetPos + Distance);
+]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="MoverIndex" Id="{5f0db44a-da6c-04c8-0f32-7b0868675ffd}" FolderPath="Properties\">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY MoverIndex : UDINT]]></Declaration>

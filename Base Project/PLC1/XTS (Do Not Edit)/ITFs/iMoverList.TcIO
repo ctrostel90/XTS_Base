@@ -114,6 +114,15 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Method Name="MoveAllRelative" Id="{0fd8515f-707b-441a-bec0-37f7ac48ddee}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD MoveAllRelative : iMoverList
+VAR_INPUT
+
+    Distance : LREAL;
+
+END_VAR
+]]></Declaration>
+    </Method>
     <Method Name="MoveAllToPosition" Id="{745a52d9-fa71-49ff-868a-52a3293e2e2d}" FolderPath="Methods\">
       <Declaration><![CDATA[METHOD MoveAllToPosition : iMoverList
 VAR_INPUT

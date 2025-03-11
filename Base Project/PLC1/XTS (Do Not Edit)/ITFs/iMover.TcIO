@@ -102,6 +102,12 @@ END_VAR
 
 ]]></Declaration>
     </Method>
+    <Method Name="MoveRelative" Id="{1b482ec3-49ca-4b2e-b11e-3f76d3013aab}" FolderPath="Methods\">
+      <Declaration><![CDATA[METHOD MoveRelative : iMover
+VAR_INPUT
+    Distance : LREAL;        //The velocity to be commanded [mm/s]
+END_VAR]]></Declaration>
+    </Method>
     <Property Name="MoverIndex" Id="{30bd3b07-1e07-05cd-1854-8bb6e4b79051}" FolderPath="Properties\">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY MoverIndex : UDINT]]></Declaration>
